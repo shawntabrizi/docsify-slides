@@ -1,0 +1,42 @@
+{
+  "name": "docsify-slides",
+  "version": "1.0.0",
+  "description": "A docsify plugin for creating slideshow-like pages.",
+  "main": "src",
+  "repository": "https://github.com/shawntabrizi/docsify-slides",
+  "author": "Shawn Tabrizi <shawntabrizi@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "rollup -c -w",
+    "clean": "rimraf ./dist",
+    "prebuild": "run-s clean",
+    "build": "run-s build:*",
+    "build:rollup": "rollup -c",
+    "build:minify": "uglifyjs --compress --mangle --output ./dist/docsify-slides.min.js -- ./dist/docsify-slides.js",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-transform-object-assign": "^6.22.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "cssnano": "^3.10.0",
+    "deepmerge": "^2.0.1",
+    "npm-run-all": "^4.1.2",
+    "rimraf": "^2.6.2",
+    "rollup": "^0.51.5",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-commonjs": "^8.2.6",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-plugin-postcss": "^1.5.1",
+    "uglify-js": "^3.3.20"
+  },
+  "keywords": [
+    "docsify",
+    "slides",
+    "slideshow",
+    "presentation"
+  ]
+}

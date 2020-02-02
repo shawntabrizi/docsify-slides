@@ -1,0 +1,81 @@
+/* Reduce spacing on sides, o.g. 800px */
+.markdown-section {
+	max-width: 90%;
+}
+
+/* Reduce spacing on top, o.g. 60px */
+.content {
+	padding-top: 0;
+}
+
+/* Make Pagination Bottom Sticky */
+@media screen and (min-width: 768px) {
+	.pagination-item {
+		margin-top: 0;
+	}
+
+	.markdown-section {
+		padding-bottom: 5em;
+	}
+
+	.docsify-pagination-container {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		height: 4em;
+		background-color: #ffffff;
+		margin: 0 5em;
+	}
+	body .pagination-item--previous {
+		transform: translateX(300px);
+		transition: transform .25s ease-out;
+	}
+	body.close .pagination-item--previous {
+		transform: translateX(0px);
+		transition: transform .25s ease-out;
+	}
+}
+
+/* Left and Right Slide */
+.slide-col {
+	float: left;
+	padding: 10px;
+}
+
+@media screen and (max-width: 768px) {
+	.slide-col {
+		width: 100% !important;
+	}
+}
+
+
+/* Fix `close` style on mobile */
+@media screen and (max-width: 768px) {
+	/* Fix behavior for when sidebar should be open */
+	body .sidebar {
+		transform: translateX(300px);
+	}
+	body .content {
+		transform: translateX(300px);
+	}
+	.sidebar-toggle {
+		background-color: rgba(255,255,255,0.8);
+		transition: 1s background-color;
+		width: 284px;
+		padding: 10px;
+	}
+
+	/* Fix behavior for when sidebar should be closed */
+	body.close .sidebar {
+		transform: translateX(0);
+	}
+	body.close .content {
+		transform: translateX(0px);
+	}
+	body.close .sidebar-toggle {
+		background-color: transparent;
+		width: auto;
+		padding: 30px 30px 10px 10px;
+	}
+}

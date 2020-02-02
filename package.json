@@ -1,6 +1,6 @@
 {
   "name": "docsify-slides",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A docsify plugin for creating slideshow-like pages.",
   "main": "src",
   "repository": "https://github.com/shawntabrizi/docsify-slides",
@@ -38,5 +38,10 @@
     "slides",
     "slideshow",
     "presentation"
+  ],
+  "files": [
+    "src",
+    "dist",
+    "README.md"
   ]
 }

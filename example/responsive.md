@@ -4,7 +4,7 @@ On screens less than 768px, the two column layout collapses.
 
 ## Cat 1
 
-![Random Kitten Image](http://placekitten.com/400/399)
+![Random Kitten Image](https://placekitten.com/400/399)
 
 
 <!-- slide:break -->
@@ -15,4 +15,4 @@ On screens less than 768px, the two column layout collapses.
 
 # Cat 2
 
-![Random Kitten Image](http://placekitten.com/400/400)
+![Random Kitten Image](https://placekitten.com/400/400)

@@ -25,7 +25,9 @@
 		right: 0;
 		height: 4em;
 		background-color: #ffffff;
-		margin: 0 5em;
+		padding-left: 40px;
+		padding-right: 10px;
+		margin-bottom: 0px;
 	}
 	body .pagination-item--previous {
 		transform: translateX(300px);
@@ -41,6 +43,7 @@
 .slide-col {
 	float: left;
 	padding: 10px;
+	padding-bottom: 4em;
 }
 
 @media screen and (max-width: 768px) {

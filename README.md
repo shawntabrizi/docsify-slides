@@ -1,8 +1,16 @@
 # docsify-slides
 
-A plugin for [docsify](https://docsify.js.org/) which allows you to make documentation which act like a slideshow.
+A plugin for [`docsify`](https://docsify.js.org/) that allows you to write documentation which acts like a slideshow.
 
-> **NOTE:** This plugin works best in combintation with [`docsify-pagination`](https://github.com/imyelo/docsify-pagination) plugin.
+## Install
+
+Simply include the plugin with your `docsify` project:
+
+```html
+<script src="//unpkg.com/docsify-slides/dist/docsify-slides.min.js"></script>
+```
+
+> **NOTE:** This plugin works best in combination with [`docsify-pagination`](https://github.com/imyelo/docsify-pagination) plugin.
 > Be sure to also enable this plugin on your docsify site for the full experience.
 
 ## What is it?
@@ -21,7 +29,9 @@ or
 <!-- slide:break-# -->
 ```
 
-where `#` is the percent of the total width you want the left side of the slide to be.
+where `#` is the percent of the total width you want the left side of the slide to be. (i.e. `<!-- slide:break-60 -->`)
+
+Check out the [example](https://shawntabrizi.github.io/docsify-slides).
 
 ### Features
 

@@ -13,6 +13,14 @@ Simply include the plugin with your `docsify` project:
 > **NOTE:** This plugin works best in combination with [`docsify-pagination`](https://github.com/imyelo/docsify-pagination) plugin.
 > Be sure to also enable this plugin on your docsify site for the full experience.
 
+### Default Closed Sidebar
+
+If you would like to have the docsify sidebar hidden by default, simply add the `class="close"` to your main `body` tag in your `index.html`.
+
+```html
+<body class="close">...</body>
+```
+
 ## What is it?
 
 This is a simple plugin which gives you a flexible two-column layout via a custom markdown syntax.
@@ -37,7 +45,7 @@ Check out the [example](https://shawntabrizi.github.io/docsify-slides).
 
 1. Responsive two column layout for your markdown pages.
 2. Reduced margins and spacing to maximize presentation real estate.
-3. `docsify` sidebar is closed by default, and closed sidebar behavior is [fixed on mobile screens](https://github.com/docsifyjs/docsify/issues/442).
+3. Closed sidebar behavior is [fixed on mobile screens](https://github.com/docsifyjs/docsify/issues/442).
 
 If you enable [`docsify-pagination`](https://github.com/imyelo/docsify-pagination):
 

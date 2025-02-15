@@ -4,13 +4,13 @@ Here is what a default slide looks like.
 
 There are two sections, and they both have 50% of the page width.
 
-![Random Kitten Image](https://placekitten.com/300/400)
+![Placeholder Image](https://picsum.photos/300/400)
 
 <!-- slide:break -->
 
-# 
+#
 
-I have added: 
+I have added:
 
 ```
 <!-- slide:break -->
@@ -18,4 +18,4 @@ I have added:
 
 in my markdown to separate these two sections.
 
-![Random Kitten Image](https://placekitten.com/300/350)
+![Placeholder Image](https://picsum.photos/300/350)

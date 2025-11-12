@@ -20,6 +20,7 @@ export function slidePlugin(hook, vm) {
   hook.afterEach(function(html) {
     if (html.includes('<!-- slide:break')) {
       var width = 50;
+      /*
       var matches = html.match(/<!-- slide:break-\d+ -->/g);
       if (matches) {
         width = matches[0].match(/(\d+)/g)[0];
@@ -36,6 +37,19 @@ export function slidePlugin(hook, vm) {
             "%'>"
         ) +
         '</div></div>';
+        */
+
+      let regex = ""
+      
+      regex = /<!-- slide:start -->/g;
+      html = html.replaceAll(regex, "<div class='slide-container'><div class='slide-col slide-left' style='width: 50%'>")
+
+      regex = /<!-- slide:break -->/g;
+      html = html.replaceAll(regex, "</div><div class='slide-col slide-right' style='width: 50%'>")
+
+      regex = /<!-- slide:end -->/g;
+      html = html.replaceAll(regex, "</div><div style=\"clear: left;\"/></div>")
+
     }
 
     return html;

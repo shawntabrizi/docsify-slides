@@ -16,11 +16,56 @@ function arrowChecker(e) {
 }
 
 export function slidePlugin(hook, vm) {
+  
+  // multiple column-layout util functions
+  function found_slide_break(str) {
+    return str.match(/<!-- slide:break-?(\d+)? -->/g);
+  }
+
   // Add left and right side of slide
   hook.afterEach(function(html) {
-    if (html.includes('<!-- slide:break')) {
+    // multiple column-layout
+    if (html.includes('<!-- slide:start')) {
+      
+      // slide:break text
+      var matches = found_slide_break(html);
+      if (!matches) return;
+      
+      // slide:break-N numbers
+      var widths = matches.map(slide_break => {
+        var number = slide_break.match(/(\d+)/g);
+        return number == null ? null : number[0];
+      });
+
+      if (!widths) return;
+
+      // process page: slide:start, slide:break-N?, slide:end
+      for (let w of widths) {
+        
+        let regex = ""
+        let regex_pattern = "";
+
+        if (w == null) {
+          w = 50;
+          regex_pattern = `<!-- slide:break -->`;
+        } else {
+          regex_pattern = `<!-- slide:break-${w} -->`;
+        }
+      
+        regex = /<!-- slide:start -->/;
+        html = html.replace(regex, `<div class='slide-container'><div class='slide-col slide-left' style='width: ${w}%'>`)
+
+        regex = new RegExp(regex_pattern, "");
+        html = html.replace(regex, `</div><div class='slide-col slide-right' style='width: ${100 - w}%'>`)
+
+        regex = /<!-- slide:end -->/;
+        html = html.replace(regex, "</div><div style=\"clear: left;\"/></div>")
+      }
+    }
+    
+    // one column-layout
+    else if (html.includes('<!-- slide:break')) {
       var width = 50;
-      /*
       var matches = html.match(/<!-- slide:break-\d+ -->/g);
       if (matches) {
         width = matches[0].match(/(\d+)/g)[0];
@@ -37,19 +82,6 @@ export function slidePlugin(hook, vm) {
             "%'>"
         ) +
         '</div></div>';
-        */
-
-      let regex = ""
-      
-      regex = /<!-- slide:start -->/g;
-      html = html.replaceAll(regex, "<div class='slide-container'><div class='slide-col slide-left' style='width: 50%'>")
-
-      regex = /<!-- slide:break -->/g;
-      html = html.replaceAll(regex, "</div><div class='slide-col slide-right' style='width: 50%'>")
-
-      regex = /<!-- slide:end -->/g;
-      html = html.replaceAll(regex, "</div><div style=\"clear: left;\"/></div>")
-
     }
 
     return html;

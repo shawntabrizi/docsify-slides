@@ -2,3 +2,6 @@
 	- [Default Slide](example/default.md)
 	- [Custom Width](example/custom.md)
 	- [Responsive Design](example/responsive.md)
+	- **Multiple Column Layout**
+  	- [Multiple Default Slide](example/multiple-layout-default.md)
+  	- [Multiple Custom Width](example/multiple-layout-custom.md)

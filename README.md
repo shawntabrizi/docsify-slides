@@ -7,7 +7,7 @@ A plugin for [`docsify`](https://docsify.js.org/) that allows you to write docum
 Simply include the plugin with your `docsify` project:
 
 ```html
-<script src="//unpkg.com/docsify-slides/dist/docsify-slides.min.js"></script>
+<script src="https://unpkg.com/docsify-slides@1.1.1/dist/docsify-slides.min.js"></script>
 ```
 
 > **NOTE:** This plugin works best in combination with [`docsify-pagination`](https://github.com/imyelo/docsify-pagination) plugin.

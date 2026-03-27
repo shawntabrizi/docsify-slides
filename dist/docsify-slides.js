@@ -35,12 +35,9 @@
   var nextLink = document.location.href;
   var previousLink = document.location.href;
   function arrowChecker(e) {
-    e = e || window.event;
-    if (e.keyCode == '37') {
-      //left
+    if (e.key === 'ArrowLeft') {
       document.location.href = previousLink;
-    } else if (e.keyCode == '39') {
-      //right
+    } else if (e.key === 'ArrowRight') {
       document.location.href = nextLink;
     }
   }

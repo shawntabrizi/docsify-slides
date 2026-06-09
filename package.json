@@ -7,6 +7,7 @@
   "author": "Shawn Tabrizi <shawntabrizi@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "test": "vitest run",
     "start": "rollup -c -w",
     "clean": "rimraf ./dist",
     "prebuild": "run-s clean",
@@ -30,7 +31,8 @@
     "rimraf": "^6.1.0",
     "rollup": "^4.53.2",
     "rollup-plugin-postcss": "^4.0.2",
-    "terser": "^5.46.1"
+    "terser": "^5.46.1",
+    "vitest": "^4.1.8"
   },
   "keywords": [
     "docsify",

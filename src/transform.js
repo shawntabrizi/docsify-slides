@@ -14,71 +14,49 @@ export function clampWidth(width) {
   return Math.max(0, Math.min(100, n));
 }
 
+// Turn one slice of content into a two-column slide, splitting on its first
+// `slide:break(-N)` marker. The left column gets N% (default 50), the right the
+// remainder. Content with no break has nothing to split, so it is returned
+// unchanged. Any break beyond the first is left as an inert comment.
+function transformBlock(inner) {
+  var firstBreak = inner.match(/<!-- slide:break-?(\d+)? -->/);
+  if (!firstBreak) return inner;
+
+  var num = firstBreak[0].match(/(\d+)/g);
+  var left = clampWidth(num == null ? 50 : num[0]);
+  var right = 100 - left;
+
+  return (
+    "<div class='slide-container'>" +
+    "<div class='slide-col slide-left' style='width: " + left + "%'>" +
+    inner.replace(
+      /<!-- slide:break-?(\d+)? -->/,
+      "</div><div class='slide-col slide-right' style='width: " + right + "%'>"
+    ) +
+    '</div><div style="clear: left;"></div></div>'
+  );
+}
+
 export function transformSlideHtml(html) {
-  // Multiple two-column slides on one page, each delimited by
-  // slide:start / slide:break(-N) / slide:end.
+  // Multiple two-column slides on one page, each delimited by its own
+  // slide:start / slide:break(-N) / slide:end. Each block is matched as a unit
+  // (non-greedy, so a block ends at its own slide:end and never swallows the
+  // next) and transformed independently — there is no positional pairing of
+  // markers, so unbalanced or break-less blocks degrade gracefully instead of
+  // scrambling the page. An unclosed slide:start simply does not match and is
+  // left in place.
   if (html.includes('<!-- slide:start')) {
-    var matches = html.match(/<!-- slide:break-?(\d+)? -->/g);
-    // A start with no break is a no-op: return the page untouched rather than
-    // dropping it (returning undefined would blank the page).
-    if (!matches) return html;
-
-    var widths = matches.map(function (slide_break) {
-      var number = slide_break.match(/(\d+)/g);
-      return number == null ? null : number[0];
-    });
-
-    // One iteration per break. Each pass consumes the first remaining
-    // start / break / end, pairing them in document order.
-    for (var i = 0; i < widths.length; i++) {
-      var w = widths[i];
-      var regex_pattern;
-      if (w == null) {
-        w = 50;
-        regex_pattern = '<!-- slide:break -->';
-      } else {
-        regex_pattern = '<!-- slide:break-' + w + ' -->';
+    return html.replace(
+      /<!-- slide:start -->([\s\S]*?)<!-- slide:end -->/g,
+      function (match, inner) {
+        return transformBlock(inner);
       }
-      var left = clampWidth(w);
-      var right = 100 - left;
-
-      html = html.replace(
-        /<!-- slide:start -->/,
-        "<div class='slide-container'><div class='slide-col slide-left' style='width: " + left + "%'>"
-      );
-      html = html.replace(
-        new RegExp(regex_pattern),
-        "</div><div class='slide-col slide-right' style='width: " + right + "%'>"
-      );
-      html = html.replace(
-        /<!-- slide:end -->/,
-        '</div><div style="clear: left;"></div></div>'
-      );
-    }
-    return html;
+    );
   }
 
   // A single two-column split for the whole page (one break, no start/end).
-  // Only the first break is honoured — a page in this mode has exactly one
-  // split, so any extra break comments are left as harmless hidden comments
-  // rather than producing mismatched extra columns.
   if (html.includes('<!-- slide:break')) {
-    var firstBreak = html.match(/<!-- slide:break-?(\d+)? -->/);
-    if (!firstBreak) return html;
-
-    var num = firstBreak[0].match(/(\d+)/g);
-    var leftWidth = clampWidth(num == null ? 50 : num[0]);
-    var rightWidth = 100 - leftWidth;
-
-    return (
-      "<div class='slide-container'>" +
-      "<div class='slide-col slide-left' style='width: " + leftWidth + "%'>" +
-      html.replace(
-        /<!-- slide:break-?(\d+)? -->/,
-        "</div><div class='slide-col slide-right' style='width: " + rightWidth + "%'>"
-      ) +
-      '</div></div>'
-    );
+    return transformBlock(html);
   }
 
   return html;

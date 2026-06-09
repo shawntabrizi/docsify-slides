@@ -35,9 +35,10 @@ describe('transformSlideHtml — pass-through', () => {
     expect(transformSlideHtml(html)).toBe(html)
   })
 
-  it('returns the page unchanged when slide:start has no break', () => {
-    // Regression: an early `return` (undefined) here blanked the whole page.
-    // A start with no break has nothing to split, so the page must pass through.
+  it('leaves an unclosed slide:start in place rather than blanking the page', () => {
+    // Regression: this case once hit an early `return` (undefined) that blanked
+    // the page. A start with no matching end does not form a block, so the page
+    // must pass through untouched.
     const html = '<!-- slide:start -->\n<p>content</p>'
     expect(transformSlideHtml(html)).toBe(html)
   })
@@ -121,5 +122,66 @@ describe('transformSlideHtml — slide:start blocks', () => {
     expect(out).not.toContain('-50%')
     expect(out).toContain("slide-left' style='width: 100%'")
     expect(out).toContain("slide-right' style='width: 0%'")
+  })
+
+  it('transforms each block independently regardless of marker counts', () => {
+    // Regression: marker pairing by document index scrambled the page when a
+    // break-less block preceded a normal one — block one's start was paired
+    // with block two's break. Each block must be handled as its own unit.
+    const out = transformSlideHtml(
+      '<!-- slide:start -->X<!-- slide:end -->' +
+        '<!-- slide:start -->A<!-- slide:break-40 -->B<!-- slide:end -->'
+    )
+    // The break-less first block contributes no column markup...
+    expect(count(out, 'slide-container')).toBe(1)
+    expect(out).toContain('X')
+    // ...and the second block splits correctly into 40/60.
+    expect(out).toContain("slide-left' style='width: 40%'")
+    expect(out).toContain("slide-right' style='width: 60%'")
+    // No raw markers leak through, and the markup is balanced.
+    expect(out).not.toContain('<!-- slide:start -->')
+    expect(out).not.toContain('<!-- slide:end -->')
+    expect(count(out, '<div')).toBe(count(out, '</div>'))
+  })
+
+  it('renders a block with no break as plain content', () => {
+    // A start/end block without a break has nothing to split: emit the inner
+    // content with the markers stripped, not broken half-open markup.
+    const out = transformSlideHtml('<!-- slide:start --><p>solo</p><!-- slide:end -->')
+    expect(out).toBe('<p>solo</p>')
+  })
+
+  it('splits a block on its first break only, leaving extras as comments', () => {
+    const out = transformSlideHtml(
+      '<!-- slide:start -->A<!-- slide:break-30 -->B<!-- slide:break-70 -->C<!-- slide:end -->'
+    )
+    expect(count(out, 'slide-left')).toBe(1)
+    expect(count(out, 'slide-right')).toBe(1)
+    expect(out).toContain("slide-left' style='width: 30%'")
+    expect(out).toContain('<!-- slide:break-70 -->')
+    expect(count(out, '<div')).toBe(count(out, '</div>'))
+  })
+
+  it('preserves content surrounding the blocks', () => {
+    // Matches the documented multiple-layout pages: paragraphs between blocks.
+    const out = transformSlideHtml(
+      '<p>intro</p>' +
+        '<!-- slide:start -->A<!-- slide:break-40 -->B<!-- slide:end -->' +
+        '<p>mid</p>' +
+        '<!-- slide:start -->C<!-- slide:break-60 -->D<!-- slide:end -->' +
+        '<p>end</p>'
+    )
+    expect(out).toContain('<p>intro</p>')
+    expect(out).toContain('<p>mid</p>')
+    expect(out).toContain('<p>end</p>')
+    expect(count(out, 'slide-container')).toBe(2)
+    expect(out).toContain("slide-left' style='width: 40%'")
+    expect(out).toContain("slide-left' style='width: 60%'")
+    expect(count(out, '<div')).toBe(count(out, '</div>'))
+  })
+
+  it('leaves an unclosed block in place instead of crashing', () => {
+    const html = '<!-- slide:start -->A<!-- slide:break-40 -->B'
+    expect(transformSlideHtml(html)).toBe(html)
   })
 })
